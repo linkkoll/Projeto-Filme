@@ -1,0 +1,46 @@
+CREATE TABLE empresa (
+    id_empresa INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    cnpj VARCHAR(14) NOT NULL UNIQUE,
+    endereco VARCHAR(255),
+    telefone VARCHAR(15),
+    email VARCHAR(100),
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE filmes (
+    id_filme INT AUTO_INCREMENT PRIMARY KEY,
+    id_empresa INT,
+    titulo VARCHAR(255) NOT NULL,
+    ano_lancamento INT,
+    genero VARCHAR(100),
+    duracao INT,  -- Duração em minutos
+    sinopse TEXT,
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_empresa) REFERENCES empresa(id_empresa) ON DELETE SET NULL
+);
+
+CREATE TABLE funcionarios (
+    id_funcionario INT AUTO_INCREMENT PRIMARY KEY,
+    id_empresa INT,
+    nome VARCHAR(255) NOT NULL,
+    cargo VARCHAR(100),
+    salario DECIMAL(10, 2),
+    data_admissao DATE,
+    data_nascimento DATE,
+    telefone VARCHAR(15),
+    email VARCHAR(100),
+    FOREIGN KEY (id_empresa) REFERENCES empresa(id_empresa) ON DELETE CASCADE
+);
+
+
+CREATE TABLE usuarios (
+    id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    senha VARCHAR(255) NOT NULL,  -- A senha deve ser armazenada de forma segura (ex.: hash)
+    data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    tipo ENUM('admin', 'cliente', 'funcionario') DEFAULT 'cliente',
+    status ENUM('ativo', 'inativo') DEFAULT 'ativo'
+);
